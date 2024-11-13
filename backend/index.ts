@@ -30,7 +30,7 @@ var router = new Router();
 
 router.get('/status', (ctx, next) => {
   ctx.body = conn.getState();
-  console.log(`Sending status to ${ctx.request.ip} (${ctx.get('user-agent')})`);
+  // console.log(`Sending status to ${ctx.request.ip} (${ctx.get('user-agent')})`);
 });
 
 // A hello post includes the name of the person saying hello
