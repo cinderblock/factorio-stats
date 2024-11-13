@@ -1,5 +1,5 @@
-// const host = 'http://' + window.location.host;
-const host = 'http://localhost:3000';
+const host = 'http://' + window.location.host;
+// const host = 'http://localhost:3000';
 
 export function sendFactoryGrowth(name: string) {
   fetch(host + '/grow', {
