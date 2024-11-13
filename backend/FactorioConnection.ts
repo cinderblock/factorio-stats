@@ -108,9 +108,6 @@ export default class FactorioConnection {
 
     // await this.sendMessageChat("Updating factory status");
 
-    // await this.send("/help screenshot");
-    await this.send('/screenshot 1000 1000');
-
     const allPlayersOffline = !Object.values(this.players).reduce(
       (p, c) => p || c,
     );
