@@ -259,11 +259,17 @@ export default class FactorioConnection {
       const offline = !match.groups.online;
 
       if (offline) {
+        if (this.players[name]) {
+          console.log(name + ' left');
+        }
+
         this.players[name] = null;
         return;
       }
 
       if (this.players[name]) return;
+
+      console.log(name + ' joined');
 
       this.players[name] = Date.now();
     });
