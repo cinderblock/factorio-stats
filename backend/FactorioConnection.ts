@@ -8,6 +8,7 @@ export default class FactorioConnection {
   private version: string;
   private time: string;
   private seed: string;
+  private paused: boolean | null = null;
   private evolution: {
     [planet: string]: {
       factor: number;
@@ -101,12 +102,6 @@ export default class FactorioConnection {
     }
 
     await this.updatePlayers();
-    await this.updateTime();
-    await this.updateVersion();
-    await this.updateEvolution();
-    await this.updateSeed();
-
-    // await this.sendMessageChat("Updating factory status");
 
     const allPlayersOffline = !Object.values(this.players).reduce(
       (p, c) => p || c,
@@ -114,8 +109,33 @@ export default class FactorioConnection {
 
     this.updateTimeout = setTimeout(
       () => this.update(),
-      allPlayersOffline ? 1000 * 10 : 1000 * 1,
+      allPlayersOffline ? 1000 * 30 : 1000 * 1,
     );
+
+    if (allPlayersOffline) {
+      if (this.paused === false) {
+        if (this.verbose) {
+          console.log('All players offline, skipping updates to prevent ticks');
+        }
+        this.paused = true;
+      }
+
+      return;
+    }
+
+    if (this.paused === true) {
+      if (this.verbose) {
+        console.log('Players online, resuming updates');
+      }
+      this.paused = false;
+    }
+
+    await this.updateTime();
+    await this.updateVersion();
+    await this.updateEvolution();
+    await this.updateSeed();
+
+    // await this.sendMessageChat("Updating factory status");
   }
 
   async sendMessageChat(message: string) {
