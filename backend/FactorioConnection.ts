@@ -44,10 +44,10 @@ export default class FactorioConnection {
 
     this.server.connect();
 
-    this.server.on('auth', () => {
+    this.server.on('auth', async () => {
       console.log('Authenticated!');
 
-      this.update();
+      await this.update();
 
       this.status = 'connected';
     });
