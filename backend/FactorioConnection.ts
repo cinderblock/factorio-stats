@@ -1,5 +1,6 @@
 import { match } from 'assert';
 import RCON from 'ts-rcon';
+import { FactoryStats } from '../ui/src/server';
 // cSpell:ignore rcon
 
 export default class FactorioConnection {
@@ -22,7 +23,7 @@ export default class FactorioConnection {
   private busy = false;
   private updateTimeout: NodeJS.Timeout;
 
-  getState() {
+  getState(): FactoryStats {
     return {
       status: this.status,
       version: this.version,
