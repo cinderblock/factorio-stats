@@ -14,21 +14,17 @@ export function sendFactoryGrowth(name: string) {
     .catch(error => console.error(error));
 }
 
-/*
-      status: this.status,
-      version: this.version,
-      time: this.time,
-      seed: this.seed,
-      players: { ...this.players },
-      evolution: { ...this.evolution },
-*/
-
 export type FactoryStats = {
-  status: 'connected' | 'disconnected';
+  status: 'init' | 'connected' | 'disconnected';
   version: string;
   time: string | number;
   seed: string;
-  players: { [name: string]: null | number };
+  players: {
+    [name: string]: {
+      lastChange: number | null; // Null means we haven't seen them yet this runtime instance
+      online: boolean;
+    };
+  };
   evolution: {
     [planet: string]: {
       factor: number;

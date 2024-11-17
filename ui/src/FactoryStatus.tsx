@@ -41,9 +41,16 @@ export default function FactoryStatus() {
   }
 
   const players = Object.keys(stats.players).sort((a, b) => {
-    const aTime = stats.players[a] || 0;
-    const bTime = stats.players[b] || 0;
-    return bTime - aTime;
+    if (stats.players[a].online != stats.players[b].online) {
+      return stats.players[a].online ? -1 : 1;
+    }
+    if (stats.players[a].lastChange === null) {
+      return -1; // a is new
+    }
+    if (stats.players[b].lastChange === null) {
+      return 1; // b is new
+    }
+    return stats.players[a].lastChange - stats.players[b].lastChange;
   });
   const planets = Object.keys(stats.evolution);
 
@@ -56,7 +63,7 @@ export default function FactoryStatus() {
             <thead>
               <tr>
                 <th>Player</th>
-                <th>Online</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody>
@@ -64,9 +71,12 @@ export default function FactoryStatus() {
                 <tr key={player}>
                   <td>{player}</td>
                   <td>
-                    {stats.players[player]
-                      ? `${((Date.now() - stats.players[player]) / 1000 / 60 / 60).toFixed(1)} hours`
-                      : 'Offline'}
+                    {stats.players[player].online ? 'Online' : 'Offline'}:{' '}
+                    {stats.players[player].lastChange === null ? (
+                      <i>Unknown</i>
+                    ) : (
+                      `${((Date.now() - stats.players[player].lastChange) / 1000 / 60 / 60).toFixed(1)} hours`
+                    )}
                   </td>
                 </tr>
               ))}

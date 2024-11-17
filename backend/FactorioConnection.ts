@@ -5,7 +5,7 @@ import { FactoryStats } from '../ui/src/server';
 
 export default class FactorioConnection {
   private server;
-  private status: 'connected' | 'disconnected' = 'disconnected';
+  private status: 'init' | 'connected' | 'disconnected' = 'init';
   private version: string;
   private time: string | number; // Raw string or parsed number of hours
   private seed: string;
@@ -18,7 +18,12 @@ export default class FactorioConnection {
       kills: number;
     };
   } = {};
-  private players: { [name: string]: null | number } = {};
+  private players: {
+    [name: string]: {
+      lastChange: number | null; // Null means we haven't seen them yet
+      online: boolean;
+    };
+  } = {};
   private verbose = false;
   private busy = false;
   private updateTimeout: NodeJS.Timeout;
@@ -41,9 +46,10 @@ export default class FactorioConnection {
 
     this.server.on('auth', () => {
       console.log('Authenticated!');
-      this.status = 'connected';
 
       this.update();
+
+      this.status = 'connected';
     });
 
     this.server.on('end', () => {
@@ -99,36 +105,23 @@ export default class FactorioConnection {
 
   async update() {
     if (this.status === 'disconnected') {
+      // TODO: Reconnect
+
       return;
     }
+
+    const lastState = this.getState();
 
     await this.updatePlayers();
 
-    const allPlayersOffline = !Object.values(this.players).reduce(
-      (p, c) => p || c,
-    );
-
     this.updateTimeout = setTimeout(
       () => this.update(),
-      allPlayersOffline ? 1000 * 30 : 1000 * 1,
+      this.paused ? 1000 * 30 : 1000 * 1,
     );
 
-    if (allPlayersOffline) {
-      if (this.paused === false) {
-        if (this.verbose) {
-          console.log('All players offline, skipping updates to prevent ticks');
-        }
-        this.paused = true;
-      }
-
+    if (this.paused && this.status !== 'init') {
+      // console.log('Paused, skipping updates to prevent spurious ticks');
       return;
-    }
-
-    if (this.paused === true) {
-      if (this.verbose) {
-        console.log('Players online, resuming updates');
-      }
-      this.paused = false;
     }
 
     await this.updateTime();
@@ -181,7 +174,7 @@ export default class FactorioConnection {
         return;
       }
 
-      const planet = m.groups.planet || 'Nauvis';
+      const planet = m.groups.planet || 'Nauvis'; // Factorio 1.0 has one planet
       // cSpell:ignore Nauvis
 
       this.evolution[planet] = {
@@ -287,6 +280,10 @@ export default class FactorioConnection {
       }
     }
 
+    const lastChange = Date.now();
+
+    let paused = true;
+
     playersList.forEach(player => {
       const match = player.match(/^(?<name>.+?)(?<online> \(online\))?$/);
 
@@ -295,22 +292,31 @@ export default class FactorioConnection {
       }
 
       const name = match.groups.name;
-      const offline = !match.groups.online;
+      const online = !!match.groups.online;
 
-      if (offline) {
-        if (this.players[name]) {
-          console.log(name + ' left');
-        }
-
-        this.players[name] = null;
-        return;
+      if (online) {
+        paused = false;
       }
 
-      if (this.players[name]) return;
+      if (!this.players[name]) {
+        this.players[name] = { online, lastChange };
+        console.log(`We just learned about ${name}`);
+      } else {
+        const lastOnline = this.players[name].online;
+        const lastChange = this.players[name].lastChange;
 
-      console.log(name + ' joined');
+        this.players[name].online = online;
 
-      this.players[name] = Date.now();
+        if (lastOnline !== online) {
+          this.players[name].lastChange = lastChange;
+
+          console.log(
+            `${name} is now ${online ? 'online' : 'offline'}${lastChange === null ? '' : ` after ${((Date.now() - lastChange) / 1000 / 60 / 60).toFixed(1)} hours`}`,
+          );
+        }
+      }
     });
+
+    this.paused = paused;
   }
 }
