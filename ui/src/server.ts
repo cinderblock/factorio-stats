@@ -26,7 +26,7 @@ export function sendFactoryGrowth(name: string) {
 export type FactoryStats = {
   status: 'connected' | 'disconnected';
   version: string;
-  time: string;
+  time: string | number;
   seed: string;
   players: { [name: string]: null | number };
   evolution: {

@@ -7,7 +7,7 @@ export default class FactorioConnection {
   private server;
   private status: 'connected' | 'disconnected' = 'disconnected';
   private version: string;
-  private time: string;
+  private time: string | number; // Raw string or parsed number of hours
   private seed: string;
   private paused: boolean | null = null;
   private evolution: {
@@ -220,9 +220,27 @@ export default class FactorioConnection {
   async updateTime() {
     const time = await this.send('/time');
 
-    if (time) {
-      this.time = time;
+    if (!time) {
+      console.log('Failed to get time');
+
+      return;
     }
+
+    const match = time.match(
+      /^(?<hours>\d+) hours?, (?<minutes>\d+) minutes?(?: and (?<seconds>\d+) seconds?)?$/,
+    );
+
+    if (!match?.groups) {
+      // Failed to parse time. Just store the raw string as a fallback.
+      this.time = time;
+      return;
+    }
+
+    const hours = +match.groups.hours;
+    const minutes = +match.groups.minutes;
+    const seconds = +match.groups.seconds;
+
+    this.time = hours + minutes / 60 + seconds / 60 / 60; // Hours
   }
 
   async updatePlayers() {

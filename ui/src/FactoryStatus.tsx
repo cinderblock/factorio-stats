@@ -107,7 +107,9 @@ export default function FactoryStatus() {
         </div>
         <div>
           <h3>Factory Age</h3>
-          {stats.time}
+          {typeof stats.time === 'number'
+            ? `${stats.time.toFixed(1)} hours`
+            : stats.time}
           <h3>Version</h3>
           {stats.version}
           <h3>Seed</h3>
