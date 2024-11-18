@@ -45,10 +45,10 @@ export default function FactoryStatus() {
       return stats.players[a].online ? -1 : 1;
     }
     if (stats.players[a].lastChange === null) {
-      return -1; // a is new
+      return 1; // a is new
     }
     if (stats.players[b].lastChange === null) {
-      return 1; // b is new
+      return -1; // b is new
     }
     return stats.players[a].lastChange - stats.players[b].lastChange;
   });
