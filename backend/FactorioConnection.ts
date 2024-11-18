@@ -226,6 +226,9 @@ export default class FactorioConnection {
     if (!match?.groups) {
       // Failed to parse time. Just store the raw string as a fallback.
       this.time = time;
+
+      console.log('Failed to parse time: ' + time);
+
       return;
     }
 
