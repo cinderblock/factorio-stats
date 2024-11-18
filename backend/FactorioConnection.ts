@@ -299,7 +299,10 @@ export default class FactorioConnection {
       }
 
       if (!this.players[name]) {
-        this.players[name] = { online, lastChange: newChange };
+        this.players[name] = {
+          online,
+          lastChange: this.status == 'init' ? null : newChange,
+        };
         console.log(`We just learned about ${name}`);
       } else {
         const lastOnline = this.players[name].online;
