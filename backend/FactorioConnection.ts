@@ -280,7 +280,7 @@ export default class FactorioConnection {
       }
     }
 
-    const lastChange = Date.now();
+    const newChange = Date.now();
 
     let paused = true;
 
@@ -299,7 +299,7 @@ export default class FactorioConnection {
       }
 
       if (!this.players[name]) {
-        this.players[name] = { online, lastChange };
+        this.players[name] = { online, lastChange: newChange };
         console.log(`We just learned about ${name}`);
       } else {
         const lastOnline = this.players[name].online;
@@ -308,10 +308,10 @@ export default class FactorioConnection {
         this.players[name].online = online;
 
         if (lastOnline !== online) {
-          this.players[name].lastChange = lastChange;
+          this.players[name].lastChange = newChange;
 
           console.log(
-            `${name} is now ${online ? 'online' : 'offline'}${lastChange === null ? '' : ` after ${((Date.now() - lastChange) / 1000 / 60 / 60).toFixed(1)} hours`}`,
+            `${name} is now ${online ? 'online' : 'offline'}${lastChange === null ? '' : ` after ${((newChange - lastChange) / 1000 / 60 / 60).toFixed(1)} hours`}`,
           );
         }
       }
