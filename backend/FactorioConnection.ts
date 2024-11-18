@@ -220,7 +220,7 @@ export default class FactorioConnection {
     }
 
     const match = time.match(
-      /^(?<hours>\d+) hours?, (?<minutes>\d+) minutes?(?: and (?<seconds>\d+) seconds?)?$/,
+      /^(?<hours>\d+) hours?(?:, (?<minutes>\d+) minutes? and (?<seconds>\d+) seconds?| and (?<minutes>\d+) minutes?)?$/,
     );
 
     if (!match?.groups) {
@@ -234,7 +234,7 @@ export default class FactorioConnection {
 
     const hours = +match.groups.hours;
     const minutes = +match.groups.minutes;
-    const seconds = +match.groups.seconds;
+    const seconds = match.groups.seconds ? +match.groups.seconds : 0;
 
     this.time = hours + minutes / 60 + seconds / 60 / 60; // Hours
   }
