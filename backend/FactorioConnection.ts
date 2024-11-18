@@ -314,7 +314,7 @@ export default class FactorioConnection {
           this.players[name].lastChange = newChange;
 
           console.log(
-            `${name} is now ${online ? 'online' : 'offline'}${lastChange === null ? '' : ` after ${((newChange - lastChange) / 1000 / 60 / 60).toFixed(1)} hours`}`,
+            `${name} is now ${online ? 'online' : 'offline'} ${lastChange === null ? 'for the first time this session' : `after ${((newChange - lastChange) / 1000 / 60 / 60).toFixed(1)} hours`}`,
           );
         }
       }
