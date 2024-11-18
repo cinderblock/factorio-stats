@@ -220,7 +220,7 @@ export default class FactorioConnection {
     }
 
     const match = time.match(
-      /^(?<hours>\d+) hours?(?:, (?<minutes>\d+) minutes? and (?<seconds>\d+) seconds?| and (?<minutes>\d+) minutes?)?$/,
+      /^(?:(?<hours>\d+) hours?)?(?:(?:(?:,| and) )?(?<minutes>\d+) minutes?)?(?:(?: and )?(?<seconds>\d+) seconds?)?$/,
     );
 
     if (!match?.groups) {
@@ -232,9 +232,13 @@ export default class FactorioConnection {
       return;
     }
 
-    const hours = +match.groups.hours;
-    const minutes = +match.groups.minutes;
-    const seconds = match.groups.seconds ? +match.groups.seconds : 0;
+    function getOrZero(str: string | undefined) {
+      return str ? +str : 0;
+    }
+
+    const hours = getOrZero(match.groups.hours);
+    const minutes = getOrZero(match.groups.minutes);
+    const seconds = getOrZero(match.groups.seconds);
 
     this.time = hours + minutes / 60 + seconds / 60 / 60; // Hours
   }
