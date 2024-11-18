@@ -71,7 +71,13 @@ export default function FactoryStatus() {
                 <tr key={player}>
                   <td>{player}</td>
                   <td>
-                    {stats.players[player].online ? '🟢' : '🔴'}:{' '}
+                    <span
+                      title={
+                        stats.players[player].online ? 'Online' : 'Offline'
+                      }
+                    >
+                      {stats.players[player].online ? '🟢' : '🔴'}
+                    </span>{' '}
                     {stats.players[player].lastChange === null ? (
                       <i>Unknown</i>
                     ) : (
