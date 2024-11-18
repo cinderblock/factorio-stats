@@ -50,7 +50,9 @@ export default function FactoryStatus() {
     if (stats.players[b].lastChange === null) {
       return -1; // b is new
     }
-    return stats.players[a].lastChange - stats.players[b].lastChange;
+    const diff = stats.players[a].lastChange - stats.players[b].lastChange;
+
+    return stats.players[a].online ? diff : -diff;
   });
   const planets = Object.keys(stats.evolution);
 
