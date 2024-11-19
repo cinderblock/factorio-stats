@@ -54,6 +54,24 @@ export default function FactoryStatus() {
 
     return stats.players[a].online ? diff : -diff;
   });
+
+  const playerHours = players.map(player => {
+    if (stats.players[player].lastChange === null) {
+      return null;
+    }
+    return (Date.now() - stats.players[player].lastChange) / 1000 / 60 / 60;
+  });
+
+  const maxPlayerHours = playerHours.reduce((a, b) => Math.max(a ?? 0, b ?? 0), 0)!;
+
+  const playerHoursDecimalPlaces = 1;
+  const playerHoursPrintedDigitsBeforeDecimal = Math.floor(Math.log(Math.max(1, maxPlayerHours)) / Math.log(10)) + 1;
+
+  const playerHoursFinalStrLength =
+    playerHoursPrintedDigitsBeforeDecimal +
+    1 + // decimal point
+    playerHoursDecimalPlaces;
+
   const planets = Object.keys(stats.evolution);
 
   return (
@@ -69,25 +87,45 @@ export default function FactoryStatus() {
               </tr>
             </thead>
             <tbody>
-              {players.map(player => (
-                <tr key={player}>
-                  <td>{player}</td>
-                  <td>
-                    <span
-                      title={
-                        stats.players[player].online ? 'Online' : 'Offline'
-                      }
-                    >
-                      {stats.players[player].online ? '🟢' : '🔴'}
-                    </span>{' '}
-                    {stats.players[player].lastChange === null ? (
-                      <i>Unknown</i>
-                    ) : (
-                      `${((Date.now() - stats.players[player].lastChange) / 1000 / 60 / 60).toFixed(1)} hours`
-                    )}
-                  </td>
-                </tr>
-              ))}
+              {players.map((player, index) => {
+                const numHours = playerHours[index];
+
+                let hours: JSX.Element | string | null = null;
+
+                if (numHours === null) {
+                  hours = <i>Unknown</i>;
+                } else {
+                  hours = numHours.toFixed(playerHoursDecimalPlaces);
+
+                  const neededDigits = playerHoursFinalStrLength - hours.length;
+
+                  hours += ' hours';
+
+                  if (neededDigits > 0) {
+                    hours = (
+                      <>
+                        <span style={{ userSelect: 'none' }}>{'\u2007'.repeat(neededDigits)}</span>
+                        {hours}
+                      </>
+                    );
+                  }
+                }
+
+                const status = (
+                  <span title={stats.players[player].online ? 'Online' : 'Offline'}>
+                    {stats.players[player].online ? '🟢' : '🔴'}
+                  </span>
+                );
+
+                return (
+                  <tr key={player}>
+                    <td>{player}</td>
+                    <td align="left">
+                      {status} {hours}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
