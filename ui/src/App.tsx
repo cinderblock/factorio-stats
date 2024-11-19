@@ -20,16 +20,9 @@ function App() {
         <FactoryStats />
       </div>
       <div className="card">
-        <input
-          type="text"
-          value={name}
-          onChange={e => setName(e.target.value)}
-          placeholder="Enter your name"
-        />
+        <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Enter your name" />
         <br />
-        <button onClick={() => sendFactoryGrowth(name)}>
-          The Factory Must Grow!
-        </button>
+        <button onClick={() => sendFactoryGrowth(name)}>The Factory Must Grow!</button>
       </div>
     </>
   );

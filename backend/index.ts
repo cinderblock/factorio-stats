@@ -43,9 +43,7 @@ router.post('/grow', (ctx, next) => {
   }
 
   ctx.body = { status: 'ok' };
-  console.log(
-    `Sending hello from ${from} (${ctx.request.ip}) (${ctx.get('user-agent')})`,
-  );
+  console.log(`Sending hello from ${from} (${ctx.request.ip}) (${ctx.get('user-agent')})`);
   conn.sendMessageChat(`${from}: The Factory Must Grow!`);
 });
 
@@ -62,7 +60,5 @@ app.use(async ctx => {
 const listenPort = process.env.PORT || 3000;
 
 app.listen(listenPort, () => {
-  console.log(
-    `Server running on port ${listenPort}. http://localhost:${listenPort}`,
-  );
+  console.log(`Server running on port ${listenPort}. http://localhost:${listenPort}`);
 });

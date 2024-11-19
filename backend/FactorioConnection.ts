@@ -85,9 +85,7 @@ export default class FactorioConnection {
     }
     this.busy = true;
 
-    const response = new Promise<string>(resolve =>
-      this.server.once('response', resolve),
-    );
+    const response = new Promise<string>(resolve => this.server.once('response', resolve));
 
     this.server.send(command);
 
@@ -114,10 +112,7 @@ export default class FactorioConnection {
 
     await this.updatePlayers();
 
-    this.updateTimeout = setTimeout(
-      () => this.update(),
-      this.paused ? 1000 * 30 : 1000 * 1,
-    );
+    this.updateTimeout = setTimeout(() => this.update(), this.paused ? 1000 * 30 : 1000 * 1);
 
     if (this.paused && this.status !== 'init') {
       // console.log('Paused, skipping updates to prevent spurious ticks');
@@ -254,9 +249,7 @@ export default class FactorioConnection {
       return;
     }
 
-    const match = players.match(
-      /Players \((?<num>\d+)\):(?<players>(?:.|\n)*)/,
-    );
+    const match = players.match(/Players \((?<num>\d+)\):(?<players>(?:.|\n)*)/);
 
     if (!match) {
       if (this.verbose) {

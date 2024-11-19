@@ -107,11 +107,7 @@ export default function FactoryStatus() {
               {planets.map(planet => (
                 <tr key={planet}>
                   <td>
-                    <img
-                      src={planetImages[planet as keyof typeof planetImages]}
-                      alt={planet}
-                      height="20em"
-                    />
+                    <img src={planetImages[planet as keyof typeof planetImages]} alt={planet} height="20em" />
                   </td>
                   <td>{planet}</td>
                   <td>{stats.evolution[planet].factor.toFixed(4)}</td>
@@ -125,9 +121,7 @@ export default function FactoryStatus() {
         </div>
         <div>
           <h3>Factory Age</h3>
-          {typeof stats.time === 'number'
-            ? `${stats.time.toFixed(1)} hours`
-            : stats.time}
+          {typeof stats.time === 'number' ? `${stats.time.toFixed(1)} hours` : stats.time}
           <h3>Version</h3>
           {stats.version}
           <h3>Seed</h3>
