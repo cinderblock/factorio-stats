@@ -53,8 +53,9 @@ export default class FactorioConnection {
     });
 
     this.server.on('end', () => {
-      console.log('Socket closed!');
-      // TODO: Reconnect
+      console.log('Socket closed! Trying to reconnect...');
+      this.status = 'disconnected';
+      this.server.connect();
     });
 
     this.server.on('server', (str: string) => {
