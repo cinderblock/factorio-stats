@@ -50,6 +50,7 @@ export default class FactorioConnection {
       await this.update();
 
       this.status = 'connected';
+      this.backoffTime = 1000;
     });
 
     this.server.on('end', () => {
@@ -64,9 +65,17 @@ export default class FactorioConnection {
 
     this.server.on('error', (err: Error) => {
       console.error('Error: ' + err);
+      setTimeout(() => {
+        this.server.connect();
+      }, this.backoff());
     });
   }
 
+  private backoffTime = 1000;
+  private backoff() {
+    this.backoffTime = Math.min(this.backoffTime * 2, 1000 * 20);
+    return this.backoffTime;
+  }
   private async send(command: string) {
     if (this.status === 'disconnected') {
       if (this.verbose) {
