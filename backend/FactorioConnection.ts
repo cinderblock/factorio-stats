@@ -44,18 +44,29 @@ export default class FactorioConnection {
 
     this.server.connect();
 
+    let backoffTime = 1000;
+    function backoff() {
+      backoffTime = Math.min(backoffTime * 2, 1000 * 20);
+      return backoffTime;
+    }
+
     this.server.on('auth', async () => {
       console.log('Authenticated!');
+
+      clearTimeout(this.updateTimeout);
 
       await this.update();
 
       this.status = 'connected';
-      this.backoffTime = 1000;
+      backoffTime = 1000;
     });
 
     this.server.on('end', () => {
       console.log('Socket closed! Trying to reconnect...');
       this.status = 'disconnected';
+
+      clearTimeout(this.updateTimeout);
+
       this.server.connect();
     });
 
@@ -65,17 +76,15 @@ export default class FactorioConnection {
 
     this.server.on('error', (err: Error) => {
       console.error('Error: ' + err);
-      setTimeout(() => {
+
+      clearTimeout(this.updateTimeout);
+
+      this.updateTimeout = setTimeout(() => {
         this.server.connect();
-      }, this.backoff());
+      }, backoff());
     });
   }
 
-  private backoffTime = 1000;
-  private backoff() {
-    this.backoffTime = Math.min(this.backoffTime * 2, 1000 * 20);
-    return this.backoffTime;
-  }
   private async send(command: string) {
     if (this.status === 'disconnected') {
       if (this.verbose) {
