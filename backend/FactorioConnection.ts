@@ -4,7 +4,7 @@ import { FactoryStats } from '../ui/src/server';
 // cSpell:ignore rcon
 
 export default class FactorioConnection {
-  private server;
+  private server: RCON;
   private status: 'init' | 'connected' | 'disconnected' = 'init';
   private version: string;
   private time: string | number; // Raw string or parsed number of hours
