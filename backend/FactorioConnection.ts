@@ -1,8 +1,10 @@
 import { match } from 'assert';
 import RCON from 'ts-rcon';
 import { FactoryStats } from '../ui/src/server';
+import { readFile, writeFile } from 'fs/promises';
 // cSpell:ignore rcon
 
+const file = 'saved-factory-players.json';
 export default class FactorioConnection {
   private server: RCON;
   private status: 'init' | 'connected' | 'disconnected' = 'init';
@@ -28,6 +30,42 @@ export default class FactorioConnection {
   private busy = false;
   private updateTimeout: NodeJS.Timeout;
 
+  async shutdown() {
+    this.server.disconnect();
+
+    clearInterval(this.updateTimeout);
+
+    this.saveState();
+  }
+
+  async saveState() {
+    await writeFile(file, JSON.stringify(this.players, null, 2), 'utf8');
+
+    console.log('Saved state to ' + file);
+  }
+
+  private async loadState() {
+    try {
+      const data = await readFile(file, 'utf8');
+
+      const players = JSON.parse(data);
+
+      for (const name in players) {
+        if (!this.players[name]) {
+          this.players[name] = players[name];
+          console.log(`We just learned about ${name} from the file`);
+        } else {
+          this.players[name].lastChange = players[name].lastChange;
+          this.players[name].online = players[name].online;
+          console.log(`We just updated ${name} from the file`);
+        }
+      }
+    } catch (e) {
+      console.error('Failed to load state from ' + file);
+      console.error(e);
+    }
+  }
+
   getState(): FactoryStats {
     return {
       status: this.status,
@@ -39,7 +77,13 @@ export default class FactorioConnection {
     };
   }
 
-  constructor(host: string, port: number, password: string) {
+  constructor(host: string, port: number, password: string, opts: { verbose?: boolean; resetSaved?: boolean } = {}) {
+    if (opts.resetSaved) {
+      console.log('Not loading saved state');
+    } else {
+      this.loadState();
+    }
+
     this.server = new RCON(host, port, password);
 
     this.server.connect();
@@ -302,7 +346,7 @@ export default class FactorioConnection {
     const newChange = Date.now();
 
     let paused = true;
-
+    let change = false;
     playersList.forEach(player => {
       const match = player.match(/^(?<name>.+?)(?<online> \(online\))?$/);
 
@@ -323,6 +367,7 @@ export default class FactorioConnection {
           lastChange: this.status == 'init' && !online ? null : newChange,
         };
         console.log(`We just learned about ${name}`);
+        change = true;
       } else {
         const lastOnline = this.players[name].online;
         const lastChange = this.players[name].lastChange;
@@ -332,13 +377,20 @@ export default class FactorioConnection {
         if (lastOnline !== online) {
           this.players[name].lastChange = newChange;
 
-          console.log(
-            `${name} is now ${online ? 'online' : 'offline'} ${lastChange === null ? 'for the first time this session' : `after ${((newChange - lastChange) / 1000 / 60 / 60).toFixed(1)} hours`}`,
-          );
+          const hours = (newChange - (lastChange ?? newChange)) / 1000 / 60 / 60;
+          const status = lastChange === null ? 'for the first time' : `after ${hours.toFixed(1)} hours`;
+
+          console.log(`${name} is now ${online ? 'online' : 'offline'} ${status}`);
+
+          change = true;
         }
       }
     });
 
     this.paused = paused;
+
+    if (change) {
+      this.saveState();
+    }
   }
 }
