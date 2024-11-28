@@ -79,6 +79,10 @@ export default class FactorioConnection {
   }
 
   constructor(host: string, port: number, password: string, opts: { verbose?: boolean; resetSaved?: boolean } = {}) {
+    if (opts.verbose) {
+      this.verbose = true;
+    }
+
     if (opts.resetSaved) {
       console.log('Not loading saved state');
     } else {
