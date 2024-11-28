@@ -1,4 +1,4 @@
-import RCON from 'ts-rcon';
+import RCON from '@trezub/ts-rcon';
 import { FactoryStats } from '../ui/src/server';
 import { readFile, writeFile } from 'fs/promises';
 // cSpell:ignore rcon
@@ -115,7 +115,7 @@ export default class FactorioConnection {
       this.server.connect();
     });
 
-    this.server.on('server', (str: string) => {
+    this.server.on('server', str => {
       console.log('Server sent: ' + str);
     });
 
