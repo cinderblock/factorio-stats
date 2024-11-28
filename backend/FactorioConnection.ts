@@ -151,11 +151,7 @@ export default class FactorioConnection {
     }
     this.busy = true;
 
-    const response = new Promise<string>(resolve => this.server.once('response', resolve));
-
-    this.server.send(command);
-
-    const ret = await response;
+    const ret = await this.server.send(command);
 
     this.busy = false;
 
