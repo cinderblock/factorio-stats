@@ -146,9 +146,7 @@ export default class FactorioConnection {
     }
 
     if (this.busy) {
-      if (this.verbose) {
-        console.log('Busy, not sending command: ' + command);
-      }
+      console.log('Busy, not sending command: ' + command);
       return;
     }
     this.busy = true;
@@ -172,6 +170,7 @@ export default class FactorioConnection {
   async update() {
     if (this.status === 'disconnected') {
       // TODO: Reconnect
+      console.log('Not connected, not updating');
 
       return;
     }
@@ -310,9 +309,7 @@ export default class FactorioConnection {
     const players = await this.send('/players');
 
     if (!players) {
-      if (this.verbose) {
-        console.log('Failed to get players');
-      }
+      console.log('Failed to get players');
 
       return;
     }
@@ -320,9 +317,7 @@ export default class FactorioConnection {
     const match = players.match(/Players \((?<num>\d+)\):(?<players>(?:.|\n)*)/);
 
     if (!match) {
-      if (this.verbose) {
-        console.log('Failed to parse players: ' + players);
-      }
+      console.log('Failed to parse players: ' + players);
 
       return;
     }
@@ -335,9 +330,7 @@ export default class FactorioConnection {
       .filter(player => player);
 
     if (numPlayers !== playersList.length) {
-      if (this.verbose) {
-        console.log('Mismatch in number of players: ' + numPlayers);
-      }
+      console.log('Mismatch in number of players: ' + numPlayers);
 
       return;
     }
