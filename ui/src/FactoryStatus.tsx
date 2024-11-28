@@ -36,6 +36,10 @@ export default function FactoryStatus() {
     return <div>Disconnected</div>;
   }
 
+  if (stats.status === 'init') {
+    return <div>Initializing connection to Factorio server</div>;
+  }
+
   if (stats.status !== 'connected') {
     return <div>WTF?</div>;
   }
