@@ -62,7 +62,9 @@ export default class FactorioConnection {
       }
     } catch (e) {
       console.error('Failed to load state from ' + file);
-      console.error(e);
+      if (this.verbose) {
+        console.error(e);
+      }
     }
   }
 
