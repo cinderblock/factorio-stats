@@ -88,6 +88,32 @@ export default function FactoryStatus() {
       <div>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <table>
+            <tbody>
+              <tr>
+                <td align="left">
+                  <strong>Factory Age</strong>
+                </td>
+                <td align="left">
+                  {typeof stats.time === 'number' ? <DurationDisplay hours={stats.time} /> : stats.time}
+                </td>
+              </tr>
+              <tr>
+                <td align="left">
+                  <strong>Version</strong>
+                </td>
+                <td align="left">{stats.version}</td>
+              </tr>
+              <tr>
+                <td align="left">
+                  <strong>Seed</strong>
+                </td>
+                <td align="left">{stats.seed}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <table>
             <thead>
               <tr>
                 <th>Player</th>
@@ -165,32 +191,6 @@ export default function FactoryStatus() {
                   <td align="right">{toPercent(stats.evolution[planet].kills)}</td>
                 </tr>
               ))}
-            </tbody>
-          </table>
-        </div>
-        <div>
-          <table>
-            <tbody>
-              <tr>
-                <td align="left">
-                  <strong>Factory Age</strong>
-                </td>
-                <td align="left">
-                  {typeof stats.time === 'number' ? <DurationDisplay hours={stats.time} /> : stats.time}
-                </td>
-              </tr>
-              <tr>
-                <td align="left">
-                  <strong>Version</strong>
-                </td>
-                <td align="left">{stats.version}</td>
-              </tr>
-              <tr>
-                <td align="left">
-                  <strong>Seed</strong>
-                </td>
-                <td align="left">{stats.seed}</td>
-              </tr>
             </tbody>
           </table>
         </div>
