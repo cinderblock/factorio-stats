@@ -139,6 +139,7 @@ export default function FactoryStatus() {
             </tbody>
           </table>
         </div>
+        <br />
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <table>
             <thead>
@@ -167,6 +168,7 @@ export default function FactoryStatus() {
             </tbody>
           </table>
         </div>
+        <br />
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <table>
             <tbody>
