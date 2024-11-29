@@ -169,12 +169,30 @@ export default function FactoryStatus() {
           </table>
         </div>
         <div>
-          <h3>Factory Age</h3>
-          {typeof stats.time === 'number' ? <DurationDisplay hours={stats.time} /> : stats.time}
-          <h3>Version</h3>
-          {stats.version}
-          <h3>Seed</h3>
-          {stats.seed}
+          <table>
+            <tbody>
+              <tr>
+                <td align="left">
+                  <strong>Factory Age</strong>
+                </td>
+                <td align="left">
+                  {typeof stats.time === 'number' ? <DurationDisplay hours={stats.time} /> : stats.time}
+                </td>
+              </tr>
+              <tr>
+                <td align="left">
+                  <strong>Version</strong>
+                </td>
+                <td align="left">{stats.version}</td>
+              </tr>
+              <tr>
+                <td align="left">
+                  <strong>Seed</strong>
+                </td>
+                <td align="left">{stats.seed}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
