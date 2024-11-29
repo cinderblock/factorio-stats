@@ -68,13 +68,7 @@ export default function FactoryStatus() {
 
   const maxPlayerHours = playerHours.reduce((a, b) => Math.max(a ?? 0, b ?? 0), 0)!;
 
-  const playerHoursDecimalPlaces = 1;
   const playerHoursPrintedDigitsBeforeDecimal = Math.floor(Math.log(Math.max(1, maxPlayerHours)) / Math.log(10)) + 1;
-
-  const playerHoursFinalStrLength =
-    playerHoursPrintedDigitsBeforeDecimal +
-    1 + // decimal point
-    playerHoursDecimalPlaces;
 
   const planets = Object.keys(stats.evolution);
 
@@ -99,20 +93,7 @@ export default function FactoryStatus() {
                 if (numHours === null) {
                   hours = <i>Unknown</i>;
                 } else {
-                  hours = numHours.toFixed(playerHoursDecimalPlaces);
-
-                  const neededDigits = playerHoursFinalStrLength - hours.length;
-
-                  hours += ' hours';
-
-                  if (neededDigits > 0) {
-                    hours = (
-                      <>
-                        <span style={{ userSelect: 'none' }}>{'\u2007'.repeat(neededDigits)}</span>
-                        {hours}
-                      </>
-                    );
-                  }
+                  hours = <DurationDisplay hours={numHours} minDigits={playerHoursPrintedDigitsBeforeDecimal} />;
                 }
 
                 const status = (
@@ -163,7 +144,7 @@ export default function FactoryStatus() {
         </div>
         <div>
           <h3>Factory Age</h3>
-          {typeof stats.time === 'number' ? `${stats.time.toFixed(1)} hours` : stats.time}
+          {typeof stats.time === 'number' ? <DurationDisplay hours={stats.time} /> : stats.time}
           <h3>Version</h3>
           {stats.version}
           <h3>Seed</h3>
@@ -177,4 +158,35 @@ export default function FactoryStatus() {
 function toPercent(n: number, digits = 0) {
   const figureSpace = '\u2007';
   return ((n * 100).toFixed(digits) + '%').padStart(4 + digits, figureSpace);
+}
+
+const playerHoursDecimalPlaces = 1;
+
+function DurationDisplay({
+  hours,
+  minDigits,
+  decimalPlaces,
+}: {
+  hours: number;
+  minDigits?: number; // Minimum number of digits to display before the decimal point
+  decimalPlaces?: number; // Number of decimal places to display
+}): JSX.Element | string {
+  decimalPlaces ??= playerHoursDecimalPlaces;
+  minDigits ??= 1;
+
+  let ret: JSX.Element | string = hours.toFixed(decimalPlaces);
+
+  const neededDigits = minDigits + 1 + decimalPlaces - ret.length;
+
+  ret += ' hours';
+
+  if (neededDigits > 0) {
+    ret = (
+      <>
+        <span style={{ userSelect: 'none' }}>{'\u2007'.repeat(neededDigits)}</span>
+        {hours}
+      </>
+    );
+  }
+  return ret;
 }
