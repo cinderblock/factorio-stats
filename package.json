@@ -4,7 +4,7 @@
   "author": "Cameron Tacklind <cameron@tacklind.com> (https://cameron.tacklind.com)",
   "repository": "github:cinderblock/factorio-stats",
   "scripts": {
-    "update": "echo .fake >> .gitignore && git stash && git pull && git stash pop && git checkout HEAD -- .gitignore && npm install",
+    "update": "echo .fake >> .gitignore && git stash --quiet && git pull && git stash pop --quiet && git checkout HEAD -- .gitignore && npm install",
     "build": "npm -w ui run build",
     "start": "npm -w backend start",
     "ui": "npm -w ui run"
