@@ -115,7 +115,7 @@ export default function FactoryStatus() {
 
                 return (
                   <tr key={player}>
-                    <td>{player}</td>
+                    <td align="left">{player}</td>
                     <td align="left">
                       {status} {hours}
                     </td>
