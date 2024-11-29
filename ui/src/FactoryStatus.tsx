@@ -120,7 +120,7 @@ export default function FactoryStatus() {
                       {status} {hours}
                     </td>
                     {lastSessionHoursPrintedDigitsBeforeDecimal === undefined ? null : (
-                      <td>
+                      <td align="left">
                         {stats.players[player].lastOnlineDuration ? (
                           <>
                             <span title="Was Online for..." style={{ opacity: 0.5 }}>
