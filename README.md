@@ -44,3 +44,15 @@ server {
     }
 }
 ```
+
+## Update
+
+```bash
+npm run update
+```
+
+### Update and Run
+
+```bash
+npm run update && npm start
+```
