@@ -5,6 +5,7 @@
   "repository": "github:cinderblock/factorio-stats",
   "scripts": {
     "update": "echo .fake >> .gitignore && git stash --quiet && git pull && git stash pop --quiet && git checkout HEAD -- .gitignore && npm install",
+    "postinstall": "npm run build",
     "build": "npm -w ui run build",
     "start": "npm -w backend start",
     "ui": "npm -w ui run"
