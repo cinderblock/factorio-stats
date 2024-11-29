@@ -210,7 +210,7 @@ function DurationDisplay({
     ret = (
       <>
         <span style={{ userSelect: 'none' }}>{'\u2007'.repeat(neededDigits)}</span>
-        {hours}
+        {ret}
       </>
     );
   }
