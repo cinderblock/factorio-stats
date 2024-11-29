@@ -1,0 +1,22 @@
+{
+  "name": "factorio-stats",
+  "private": true,
+  "author": "Cameron Tacklind <cameron@tacklind.com> (https://cameron.tacklind.com)",
+  "repository": "github:cinderblock/factorio-stats",
+  "scripts": {
+    "update": "git stash && git pull && git stash pop && npm install",
+    "build": "npm -w ui run build",
+    "start": "npm -w backend start",
+    "ui": "npm -w ui run"
+  },
+  "workspaces": [
+    "backend",
+    "ui"
+  ],
+  "overrides": {
+    "fork-me-on-github": {
+      "react": ">=16.8.6",
+      "react-dom": ">=16.8.6"
+    }
+  }
+}

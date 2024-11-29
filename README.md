@@ -14,17 +14,13 @@ The backend server must be started and configured with the correct RCON settings
 git clone https://github.com/cinderblock/factorio-stats.git
 cd factorio-stats
 
-pushd ui
 npm install
-npm run build
+
 # Serve the contents of the ui/dist folder with a web server
 
-popd
+cp backend/.env.example backend/.env
+# Edit backend/.env to match your server's RCON settings
 
-pushd backend
-npm install
-cp .env.example .env
-# Edit .env to match your server's RCON settings
 npm start
 ```
 

@@ -1,5 +1,11 @@
 {
-  "name": "backend",
+  "name": "factorio-stats-backend",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cinderblock/factorio-stats.git",
+    "directory": "backend"
+  },
   "scripts": {
     "start": "tsx --env-file=.env index.ts",
     "watch": "tsx watch --env-file=.env index.ts"
