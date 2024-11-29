@@ -158,11 +158,11 @@ export default function FactoryStatus() {
                   <td>
                     <img src={planetImages[planet as keyof typeof planetImages]} alt={planet} height="20em" />
                   </td>
-                  <td>{planet}</td>
-                  <td>{stats.evolution[planet].factor.toFixed(4)}</td>
-                  <td>{toPercent(stats.evolution[planet].time)}</td>
-                  <td>{toPercent(stats.evolution[planet].pollution)}</td>
-                  <td>{toPercent(stats.evolution[planet].kills)}</td>
+                  <td align="left">{planet}</td>
+                  <td align="right">{stats.evolution[planet].factor.toFixed(4)}</td>
+                  <td align="right">{toPercent(stats.evolution[planet].time)}</td>
+                  <td align="right">{toPercent(stats.evolution[planet].pollution)}</td>
+                  <td align="right">{toPercent(stats.evolution[planet].kills)}</td>
                 </tr>
               ))}
             </tbody>
