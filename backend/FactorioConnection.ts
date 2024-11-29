@@ -22,6 +22,7 @@ export default class FactorioConnection {
   private players: {
     [name: string]: {
       lastChange: number | null; // Null means we haven't seen them yet
+      lastOnlineDuration?: number;
       online: boolean;
     };
   } = {};
@@ -56,6 +57,7 @@ export default class FactorioConnection {
         } else {
           this.players[name].lastChange = players[name].lastChange;
           this.players[name].online = players[name].online;
+          this.players[name].lastOnlineDuration = players[name].lastOnlineDuration;
           console.log(`We just updated ${name} from the file`);
         }
       }
@@ -375,6 +377,8 @@ export default class FactorioConnection {
           const status = lastChange === null ? 'for the first time' : `after ${hours.toFixed(1)} hours`;
 
           console.log(`${name} is now ${online ? 'online' : 'offline'} ${status}`);
+
+          this.players[name].lastOnlineDuration = online ? undefined : hours;
 
           change = true;
         }

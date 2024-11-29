@@ -22,6 +22,7 @@ export type FactoryStats = {
   players: {
     [name: string]: {
       lastChange: number | null; // Null means we haven't seen them yet this runtime instance
+      lastOnlineDuration?: number;
       online: boolean;
     };
   };

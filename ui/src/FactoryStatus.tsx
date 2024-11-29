@@ -70,6 +70,16 @@ export default function FactoryStatus() {
 
   const playerHoursPrintedDigitsBeforeDecimal = Math.floor(Math.log(Math.max(1, maxPlayerHours)) / Math.log(10)) + 1;
 
+  const maxLastSessionHours = players.reduce<number | undefined>(
+    (max, player) =>
+      stats.players[player].lastOnlineDuration === max
+        ? max
+        : Math.max(max ?? 0, stats.players[player].lastOnlineDuration ?? 0),
+    undefined,
+  );
+  const lastSessionHoursPrintedDigitsBeforeDecimal =
+    maxLastSessionHours && Math.floor(Math.log(Math.max(1, maxLastSessionHours)) / Math.log(10)) + 1;
+
   const planets = Object.keys(stats.evolution);
 
   return (
@@ -82,6 +92,7 @@ export default function FactoryStatus() {
               <tr>
                 <th>Player</th>
                 <th>Status</th>
+                {lastSessionHoursPrintedDigitsBeforeDecimal === undefined ? null : <th>Last Session</th>}
               </tr>
             </thead>
             <tbody>
@@ -108,6 +119,21 @@ export default function FactoryStatus() {
                     <td align="left">
                       {status} {hours}
                     </td>
+                    {lastSessionHoursPrintedDigitsBeforeDecimal === undefined ? null : (
+                      <td>
+                        {stats.players[player].lastOnlineDuration ? (
+                          <>
+                            <span title="Was Online for..." style={{ opacity: 0.5 }}>
+                              🟢
+                            </span>{' '}
+                            <DurationDisplay
+                              hours={stats.players[player].lastOnlineDuration}
+                              minDigits={lastSessionHoursPrintedDigitsBeforeDecimal}
+                            />
+                          </>
+                        ) : null}
+                      </td>
+                    )}
                   </tr>
                 );
               })}
