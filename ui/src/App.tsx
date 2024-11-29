@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import spaceAge from './assets/press-kit-space-age/logos/factorio-space-age-logo-web.png';
 import './App.css';
+import ForkMe from 'fork-me-on-github';
 
 import FactoryStats from './FactoryStatus.tsx';
 import { sendFactoryGrowth } from './server';
@@ -10,6 +11,7 @@ function App() {
 
   return (
     <>
+      <ForkMe repo="https://github.com/cinderblock/factorio-stats" />
       <div>
         <h1>Blake, Cameron, and Andrew's</h1>
         <a href="https://www.factorio.com/" target="_blank">
