@@ -82,11 +82,13 @@ export default function FactoryStatus() {
 
   const planets = Object.keys(stats.evolution);
 
+  const tableStyle = { borderSpacing: '1em 0' };
+
   return (
     <div>
       <div>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <table>
+          <table style={tableStyle}>
             <thead>
               <tr>
                 <th>Player</th>
@@ -141,7 +143,7 @@ export default function FactoryStatus() {
         </div>
         <br />
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <table>
+          <table style={tableStyle}>
             <thead>
               <tr>
                 <th>{/* Icon */}</th>
@@ -170,7 +172,7 @@ export default function FactoryStatus() {
         </div>
         <br />
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <table>
+          <table style={tableStyle}>
             <tbody>
               <tr>
                 <td align="left">
