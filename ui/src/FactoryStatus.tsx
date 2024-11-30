@@ -91,9 +91,9 @@ export default function FactoryStatus() {
           <table style={tableStyle}>
             <thead>
               <tr>
-                <th>Player</th>
-                <th>Status</th>
-                {lastSessionHoursPrintedDigitsBeforeDecimal === undefined ? null : <th>Last Session</th>}
+                <th align="left">Player</th>
+                <th align="left">Status</th>
+                {lastSessionHoursPrintedDigitsBeforeDecimal === undefined ? null : <th align="left">Last Session</th>}
               </tr>
             </thead>
             <tbody>
@@ -147,11 +147,11 @@ export default function FactoryStatus() {
             <thead>
               <tr>
                 <th>{/* Icon */}</th>
-                <th>Planet</th>
-                <th>Factor</th>
-                <th>Time</th>
-                <th>Pollution</th>
-                <th>Kills</th>
+                <th align="left">Planet</th>
+                <th align="left">Factor</th>
+                <th align="left">Time</th>
+                <th align="left">Pollution</th>
+                <th align="left">Kills</th>
               </tr>
             </thead>
             <tbody>
