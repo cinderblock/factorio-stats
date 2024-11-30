@@ -5,5 +5,18 @@
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSaveMode": "file",
-  "cSpell.words": ["Factorio"]
+  "cSpell.words": [
+    "Factorio",
+    "RCON",
+    "trezub",
+    "Tacklind",
+    "cinderblock",
+    "tseslint",
+    "Octocat",
+    "Nauvis",
+    "Vulcanus",
+    "Fulgora",
+    "Gleba",
+    "Aquilo"
+  ]
 }
